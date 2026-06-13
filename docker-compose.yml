@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+    backend:
+      container_name: df-backend
+      build: ./backend
+      ports:
+        - "8000:8000"
+      volumes:
+        - ./backend:/app 
+      environment:
+        DB_CONNECTION: pgsql
+        DB_HOST: postgres
+        DB_DATABASE: darfix
+        DB_USERNAME: hanzouri
+        DB_PASSWORD: BB228818
+      depends_on:
+        - postgres 
+      command: sh -c "composer install && php artisan serve --host=0.0.0.0 --port=8000"  
+
+    frontend:
+      container_name: df-frontend
+      build: ./frontend
+      ports:
+        - "3000:3000"
+      volumes:
+        - ./frontend:/app
+        - /app/node_modules
+      depends_on:
+        - backend
+      command: npm run dev -- --host
+          
+    postgres:
+      image: postgres:16
+      container_name: df-postgres
+      ports:
+        - "5434:5432"
+      environment:
+        POSTGRES_DB: darfix
+        POSTGRES_USER: hanzouri
+        POSTGRES_PASSWORD: BB228818
+      volumes:
+        - df-postgres-data:/var/lib/postgresql/data
+volumes:
+  df-postgres-data: 
