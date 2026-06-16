@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ServiceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +35,15 @@ Route::controller(CategoryController::class)->middleware('auth:sanctum')->group(
 
 
 });
+
+Route::controller(ServiceController::class)->middleware('auth:sanctum')->group(function(){
+    Route::post('/services','store');
+    Route::get('/services/{service}','show');
+    Route::put('/services/{service}','update');
+    Route::delete('/services/{service}','destroy');
+});
+
+Route::get('/services',[ServiceController::class,'index']);
 
 Route::middleware('auth:sanctum')->get('/role-test',function(){
 
