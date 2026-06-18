@@ -24,4 +24,14 @@ class ReservationPolicy
     public function delete(User $user,Reservation $reservation){
         return $user->role->name==='client' && $user->id === $reservation->client_id;
     }
+
+    public function accept(User $user,Reservation $reservation){
+        return $user->role->name==='artisan' && $user->id===$reservation->service->artisan_id;
+    }
+    public function reject(User $user,Reservation $reservation){
+        return $user->role->name==='artisan' && $user->id===$reservation->service->artisan_id;
+    }
+    public function complete(User $user,Reservation $reservation){
+        return $user->role->name==='client' && $user->id===$reservation->client_id;
+    }
 }

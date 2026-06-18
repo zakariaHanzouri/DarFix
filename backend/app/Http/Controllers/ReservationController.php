@@ -96,4 +96,25 @@ class ReservationController extends Controller
             'message' => 'Deleted Successfully'
         ]);
     }
+
+    public function complete(Reservation $reservation){
+
+        $this->authorize('complete',$reservation);
+
+        if ($reservation->status !=="accepted") {
+            throw ValidationException::withMessages([
+                'message' => 'Cannot make this resevation as completed'
+            ]);
+        }
+
+        $reservation->update([
+            'status'=>'completed'
+        ]);
+        return response()->json([
+            'reservation' => new ReservationResource(
+                $reservation->load('client', 'service')
+            ),
+            'message' => 'Reservation completed successfully'
+        ]);
+    }
 }
