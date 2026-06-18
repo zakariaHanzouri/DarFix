@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ServiceController;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,15 +37,29 @@ Route::controller(CategoryController::class)->middleware('auth:sanctum')->group(
 
 
 });
-
+// ------------------------------------------------------------------------------------------------
 Route::controller(ServiceController::class)->middleware('auth:sanctum')->group(function(){
     Route::post('/services','store');
     Route::get('/services/{service}','show');
     Route::put('/services/{service}','update');
     Route::delete('/services/{service}','destroy');
+    });
+    
+    Route::get('/services',[ServiceController::class,'index']);
+// ------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
+Route::controller(ReservationController::class)->middleware('auth:sanctum')->group(function(){
+
+Route::get('/reservations','index');
+Route::post('/reservations','store');
+Route::get('/reservations/{reservation}','show');
+Route::put('/reservations/{reservation}/reschedule','update');
+Route::delete('/reservations/{reservation}','destroy');
+
 });
 
-Route::get('/services',[ServiceController::class,'index']);
+
+// ------------------------------------------------------------------------------------------------
 
 Route::middleware('auth:sanctum')->get('/role-test',function(){
 
