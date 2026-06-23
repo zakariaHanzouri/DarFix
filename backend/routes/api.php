@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArtisanController;
 use App\Http\Controllers\ArtisanReservationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
@@ -64,6 +65,13 @@ Route::controller(ArtisanReservationController::class)->middleware('auth:sanctum
     Route::get('/artisan/reservations', 'index');
     Route::patch('/reservations/{reservation}/accept', 'accept');
     Route::patch('/reservations/{reservation}/reject', 'reject');
+
+
+});
+Route::controller(ArtisanController::class)->middleware('auth:sanctum')->group(function () {
+
+    Route::get('/artisans/{id}', 'show');
+    
 
 
 });
