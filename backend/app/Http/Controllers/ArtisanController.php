@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ServiceResource;
 use App\Http\Resources\UserResource;
 use App\Models\Reservation;
+use App\Models\Review;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
+
 
 class ArtisanController extends Controller
 {
@@ -36,13 +36,21 @@ class ArtisanController extends Controller
         
         
         $services=$artisan->services()->with('category')->get();
+
+        $reviewQuery=Review::whereHas('reservation.service',function($q) use ($artisan) {
+            $q->where('artisan_id',$artisan->id);
+        });
         
+        $reviewCount=(clone $reviewQuery)->count();
+        $reviewAvg=(clone $reviewQuery)->avg('rating');
 
         return response()->json([
             'artisan'=>new UserResource($artisan),
             'statistics'=>[
                 'services_count'=>$services_count,
                 'completed_reservations'=>$completed_reservations,
+                'reviews_count'=>$reviewCount,
+                'average_rating'=>round($reviewAvg??0,1),
             ],
             'services'=>ServiceResource::collection($services)
         ]);
