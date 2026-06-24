@@ -5,6 +5,7 @@ use App\Http\Controllers\ArtisanReservationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ServiceController;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
@@ -72,8 +73,11 @@ Route::controller(ArtisanController::class)->middleware('auth:sanctum')->group(f
 
     Route::get('/artisans/{id}', 'show');
     
+});
+Route::controller(ReviewController::class)->middleware('auth:sanctum')->group(function () {
 
-
+    Route::post('/reviews', 'store');
+    
 });
 
 
