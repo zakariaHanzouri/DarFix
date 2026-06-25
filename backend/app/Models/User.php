@@ -32,7 +32,7 @@ class User extends Authenticatable
     }
 
     // User(id,name,email,password,phone,city, role_id,created_at,updated_at);
-    protected $fillable=["name","email","phone","city","password","role_id"];
+    protected $fillable=["name","email","phone","city","password","role_id",'is_active'];
 
     public function role(){
         return $this->belongsTo(Role::class);

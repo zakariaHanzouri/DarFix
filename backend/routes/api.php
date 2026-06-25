@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\ArtisanController;
 use App\Http\Controllers\ArtisanReservationController;
 use App\Http\Controllers\AuthController;
@@ -80,6 +82,14 @@ Route::controller(ReviewController::class)->middleware('auth:sanctum')->group(fu
     
 });
 
+Route::get("/admin/dashboard",[AdminDashboardController::class,'index'])->middleware('auth:sanctum');
+
+Route::controller(AdminUserController::class)->middleware('auth:sanctum')->group(function(){
+    Route::get('/admin/users','users');
+    Route::get('/admin/artisans','artisans');
+    Route::get('/admin/clients','clients');
+    Route::patch('/admin/users/{user}/toggle-status','toggleStatus');
+});
 
 // ------------------------------------------------------------------------------------------------
 

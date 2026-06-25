@@ -34,7 +34,19 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request){
 
+
+        
+
+
         $credentials= $request->validated();
+
+        $user=User::where('email','=',$credentials['email'])->first();
+
+        if (!$user->is_active) {
+            return throw ValidationException::withMessages([
+                'message'=>'Your account is suspended'
+            ]);
+        }
 
         if (!Auth::attempt($credentials)) {
              throw ValidationException::withMessages([
