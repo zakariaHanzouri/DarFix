@@ -22,4 +22,8 @@ class Service extends Model
         return $this->hasMany(Reservation::class);
     }
 
+    public function favoritedBy(){
+        return $this->belongsToMany(User::class,'favorites','service_id','client_id');
+    }
+
 }

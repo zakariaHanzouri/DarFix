@@ -7,6 +7,7 @@ use App\Http\Controllers\ArtisanController;
 use App\Http\Controllers\ArtisanReservationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ServiceController;
@@ -94,6 +95,12 @@ Route::controller(AdminUserController::class)->middleware('auth:sanctum')->group
 Route::controller(AdminReviewController::class)->middleware('auth:sanctum')->group(function () {
     Route::get('/admin/reviews', 'reviews');
     Route::delete('/admin/reviews/{review}', 'destroy');
+});
+Route::controller(FavoriteController::class)->middleware('auth:sanctum')->group(function () {
+    Route::get('/favorites', 'index');
+    Route::post('/favorites/{service}', 'store');
+    Route::delete('/favorites/{service}', 'destroy');
+    
 });
 
 // ------------------------------------------------------------------------------------------------

@@ -26,7 +26,7 @@ class ServiceController extends Controller
             $query->where('category_id', $category_id);
         }
 
-        $services = $query->with('category', 'artisan')->paginate(1);
+        $services = $query->with('category', 'artisan')->paginate(10);
 
         return response()->json([
             'services' => ServiceResource::collection($services),
@@ -55,6 +55,7 @@ class ServiceController extends Controller
         }
 
         $service = Service::create($data);
+        $service->load('category');
 
         return response()->json([
             'service' => new ServiceResource($service),
