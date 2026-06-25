@@ -15,6 +15,7 @@ class ReviewResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            "id"=>$this->id,
             "reservation"=>new ReservationResource($this->whenLoaded('reservation')),
             "rating"=>$this->rating,
             "comment"=>$this->comment,

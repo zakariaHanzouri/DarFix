@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminReviewController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\ArtisanController;
 use App\Http\Controllers\ArtisanReservationController;
@@ -74,21 +75,25 @@ Route::controller(ArtisanReservationController::class)->middleware('auth:sanctum
 Route::controller(ArtisanController::class)->middleware('auth:sanctum')->group(function () {
 
     Route::get('/artisans/{id}', 'show');
-    
+
 });
 Route::controller(ReviewController::class)->middleware('auth:sanctum')->group(function () {
 
     Route::post('/reviews', 'store');
-    
+
 });
 
-Route::get("/admin/dashboard",[AdminDashboardController::class,'index'])->middleware('auth:sanctum');
+Route::get("/admin/dashboard", [AdminDashboardController::class, 'index'])->middleware('auth:sanctum');
 
-Route::controller(AdminUserController::class)->middleware('auth:sanctum')->group(function(){
-    Route::get('/admin/users','users');
-    Route::get('/admin/artisans','artisans');
-    Route::get('/admin/clients','clients');
-    Route::patch('/admin/users/{user}/toggle-status','toggleStatus');
+Route::controller(AdminUserController::class)->middleware('auth:sanctum')->group(function () {
+    Route::get('/admin/users', 'users');
+    Route::get('/admin/artisans', 'artisans');
+    Route::get('/admin/clients', 'clients');
+    Route::patch('/admin/users/{user}/toggle-status', 'toggleStatus');
+});
+Route::controller(AdminReviewController::class)->middleware('auth:sanctum')->group(function () {
+    Route::get('/admin/reviews', 'reviews');
+    Route::delete('/admin/reviews/{review}', 'destroy');
 });
 
 // ------------------------------------------------------------------------------------------------
