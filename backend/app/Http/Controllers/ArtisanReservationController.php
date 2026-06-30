@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ReservationResource;
+use App\Models\Notification;
 use App\Models\Reservation;
 use Illuminate\Validation\ValidationException;
 
@@ -41,6 +42,12 @@ class ArtisanReservationController extends Controller
             "status" => "accepted"
         ]);
 
+        Notification::create([
+            'user_id' => $reservation->client_id,
+            'title' => 'Resevation Accepted',
+            'message' => 'Your reservation has been accepted.'
+        ]);
+
         return response()->json([
             'reservation' => new ReservationResource(
                 $reservation->load('client', 'service')
@@ -60,6 +67,11 @@ class ArtisanReservationController extends Controller
 
         $reservation->update([
             "status" => "rejected"
+        ]);
+        Notification::create([
+            'user_id' => $reservation->client_id,
+            'title' => 'Resevation Accepted',
+            'message' => 'Your reservation has been rejected.'
         ]);
 
         return response()->json([

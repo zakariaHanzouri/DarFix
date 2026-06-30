@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreReservationRequest;
 use App\Http\Resources\ReservationResource;
+use App\Models\Notification;
 use App\Models\Reservation;
 use Illuminate\Validation\ValidationException;
 
@@ -40,6 +41,12 @@ class ReservationController extends Controller
         }
 
         $reservation = Reservation::create($data);
+
+        Notification::create([
+            "user_id"=>$reservation->service->artisan_id,
+            "title"=>"New Reservation",
+            "message"=>"You have received a new reservation  for ".$reservation->service->title,
+        ]);
 
         return response()->json([
             'reservation' => new ReservationResource($reservation),

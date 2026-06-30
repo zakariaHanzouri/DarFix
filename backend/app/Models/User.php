@@ -16,7 +16,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable,HasApiTokens;
+    use HasFactory, Notifiable, HasApiTokens;
 
     /**
      * Get the attributes that should be cast.
@@ -32,21 +32,30 @@ class User extends Authenticatable
     }
 
     // User(id,name,email,password,phone,city, role_id,created_at,updated_at);
-    protected $fillable=["name","email","phone","city","password","role_id",'is_active'];
+    protected $fillable = ["name", "email", "phone", "city", "password", "role_id", 'is_active'];
 
-    public function role(){
+    public function role()
+    {
         return $this->belongsTo(Role::class);
     }
 
-    public function services(){
-        return $this->hasMany(Service::class,'artisan_id');
+    public function services()
+    {
+        return $this->hasMany(Service::class, 'artisan_id');
     }
 
-    public function reservations(){
-        return $this->hasMany(Reservation::class,"client_id");
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class, "client_id");
     }
 
-    public function favoriteServices(){
-        return $this->belongsToMany(Service::class,'favorites','client_id','service_id');
+    public function favoriteServices()
+    {
+        return $this->belongsToMany(Service::class, 'favorites', 'client_id', 'service_id');
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
     }
 }

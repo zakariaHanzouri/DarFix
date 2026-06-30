@@ -8,6 +8,7 @@ use App\Http\Controllers\ArtisanReservationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ServiceController;
@@ -100,6 +101,13 @@ Route::controller(FavoriteController::class)->middleware('auth:sanctum')->group(
     Route::get('/favorites', 'index');
     Route::post('/favorites/{service}', 'store');
     Route::delete('/favorites/{service}', 'destroy');
+    
+});
+Route::controller(NotificationController::class)->middleware('auth:sanctum')->group(function () {
+    Route::get('/notifications', 'index');
+    Route::patch('/notifications/{notification}/read', 'makeAsRead');
+    Route::delete('/notifications/{notification}', 'destroy');
+    
     
 });
 
