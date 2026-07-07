@@ -18,10 +18,16 @@ class FavoriteController extends Controller
             abort(403, 'Unauthorize');
         }
 
-        $favoriteServices = $client->favoriteServices()->with(['category', 'artisan'])->get();
+        $favoriteServices = $client->favoriteServices()->with(['category', 'artisan'])->paginate(10);
 
         return response()->json([
-            'favoriteServices' => ServiceResource::collection($favoriteServices)
+            'favoriteServices' => ServiceResource::collection($favoriteServices),
+            'pagination' => [
+                'current_page' => $favoriteServices->currentPage(),
+                'last_page' => $favoriteServices->lastPage(),
+                'per_page' => $favoriteServices->perPage(),
+                'total_items' => $favoriteServices->total()
+            ]
         ]);
 
     }
@@ -46,8 +52,10 @@ class FavoriteController extends Controller
 
         return response()->json([
             'message' => "Added to you favorite"
-        ]);
+        ],201);
     }
+
+    
     public function destroy(Service $service)
     {
         $client = auth()->user();
@@ -59,7 +67,7 @@ class FavoriteController extends Controller
 
         return response()->json([
             'message' => "removed from  your favorite list"
-        ]);
+        ],204);
     }
 
 

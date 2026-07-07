@@ -50,7 +50,7 @@ class AdminReviewController extends Controller
 
         return response()->json([
             'message' => "Review deleted successfully"
-        ]);
+        ], 204);
     }
 
 

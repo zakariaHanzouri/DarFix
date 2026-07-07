@@ -23,7 +23,7 @@ class ReviewController extends Controller
         $reservation = Reservation::findOrFail($request->reservation_id);
         $user = auth()->user();
 
-        
+
 
         if ($user->id !== $reservation->client_id) {
             abort(403);
@@ -45,14 +45,15 @@ class ReviewController extends Controller
         $review = Review::create($data);
 
         Notification::create([
-            "user_id"=>$reservation->service->artisan_id,
-            "title"=>"New Review",
-            "message"=>"You have receive a review for ".$reservation->service->title,
+            "user_id" => $reservation->service->artisan_id,
+            "title" => "New Review",
+            "message" => "You have receive a review for " . $reservation->service->title,
         ]);
 
-        return response()->json(["review" => new ReviewResource($review),
-        "message"=>"Review  created successfully "
-        ],201);
+        return response()->json([
+            "review" => new ReviewResource($review),
+            "message" => "Review  created successfully "
+        ], 201);
 
     }
 

@@ -24,38 +24,44 @@ class ArtisanController extends Controller
         // 5. Return response
         $artisan = User::findOrFail($id);
         if ($artisan->role->name !== "artisan") {
-           abort(404);
+            abort(404);
         }
 
-        $services_count=$artisan->services()->count();
-        $completed_reservations=Reservation::whereHas('service',function($q) use ($artisan){
-            $q->where('artisan_id',$artisan->id);
-        } )
-        ->where('status','completed')
-        ->count();
-        
-        
-        $services=$artisan->services()->with('category')->get();
+        $services_count = $artisan->services()->count();
+        $completed_reservations = Reservation::whereHas('service', function ($q) use ($artisan) {
+            $q->where('artisan_id', $artisan->id);
+        })
+            ->where('status', 'completed')
+            ->count();
 
-        $reviewQuery=Review::whereHas('reservation.service',function($q) use ($artisan) {
-            $q->where('artisan_id',$artisan->id);
+
+        $services = $artisan->services()->with('category')->paginate(10);
+
+        $reviewQuery = Review::whereHas('reservation.service', function ($q) use ($artisan) {
+            $q->where('artisan_id', $artisan->id);
         });
-        
-        $reviewCount=(clone $reviewQuery)->count();
-        $reviewAvg=(clone $reviewQuery)->avg('rating');
+
+        $reviewCount = (clone $reviewQuery)->count();
+        $reviewAvg = (clone $reviewQuery)->avg('rating');
 
         return response()->json([
-            'artisan'=>new UserResource($artisan),
-            'statistics'=>[
-                'services_count'=>$services_count,
-                'completed_reservations'=>$completed_reservations,
-                'reviews_count'=>$reviewCount,
-                'average_rating'=>round($reviewAvg??0,1),
+            'artisan' => new UserResource($artisan),
+            'statistics' => [
+                'services_count' => $services_count,
+                'completed_reservations' => $completed_reservations,
+                'reviews_count' => $reviewCount,
+                'average_rating' => round($reviewAvg ?? 0, 1),
             ],
-            'services'=>ServiceResource::collection($services)
+            'services' => ServiceResource::collection($services),
+            'pagination' => [
+                'current_page' => $services->currentPage(),
+                'last_page' => $services->lastPage(),
+                'per_page' => $services->perPage(),
+                'total_items' => $services->total()
+            ]
         ]);
 
-        
+
 
 
 

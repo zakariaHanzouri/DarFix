@@ -60,7 +60,7 @@ class ServiceController extends Controller
         return response()->json([
             'service' => new ServiceResource($service),
             'message' => 'Service created successfully'
-        ]);
+        ],201);
 
     }
 
@@ -98,7 +98,7 @@ class ServiceController extends Controller
         return response()->json([
             'service' => new ServiceResource($service),
             'message' => 'Service updated successfully'
-        ]);
+        ],200);
 
     }
 
@@ -112,7 +112,7 @@ class ServiceController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Service Deleted successfully ',
-        ]);
+        ],204);
 
     }
 

@@ -23,17 +23,15 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        // Role::factory()->create(
-        //     [
-        //         'name' => 'client'
-        //     ],);
-        // Role::factory()->create(
-        //     [
-        //         'name' => 'artisan'
-        //     ],);
-        // Role::factory()->create(
-        //     [
-        //         'name' => 'admin'
-        //     ],);
+        $this->call([
+            RoleSeeder::class,
+            UserSeeder::class,
+            CategorySeeder::class,
+            ServiceSeeder::class,
+            ReservationSeeder::class,
+            ReviewSeeder::class,
+            FavoriteSeeder::class,
+        ]);
+
     }
 }

@@ -18,10 +18,16 @@ class ArtisanReservationController extends Controller
 
         $reservations = Reservation::whereHas('service', function ($query) use ($artisanId) {
             $query->where('artisan_id', $artisanId);
-        })->with('client', 'service')->get();
+        })->with('client', 'service')->paginate(10);
 
         return response()->json([
-            'reservations' => ReservationResource::collection($reservations)
+            'reservations' => ReservationResource::collection($reservations),
+            'pagination' => [
+                'current_page' => $reservations->currentPage(),
+                'last_page' => $reservations->lastPage(),
+                'per_page' => $reservations->perPage(),
+                'total_items' => $reservations->total()
+            ]
         ]);
 
     }

@@ -16,10 +16,16 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::paginate(10);
 
         return response()->json([
-            'categories' => CategoryResource::collection($categories)
+            'categories' => CategoryResource::collection($categories),
+            'pagination' => [
+                'current_page' => $categories->currentPage(),
+                'last_page' => $categories->lastPage(),
+                'per_page' => $categories->perPage(),
+                'total_items' => $categories->total()
+            ]
         ]);
     }
 
@@ -33,7 +39,8 @@ class CategoryController extends Controller
         $category = Category::create($data);
 
         return response()->json([
-            'category' => new CategoryResource($category)
+            'category' => new CategoryResource($category),
+            'message' => "Category created successfully"
         ], 201);
     }
 
@@ -61,8 +68,9 @@ class CategoryController extends Controller
         $category->update($updatedData);
 
         return response()->json([
-            'category' => new CategoryResource($category)
-        ]);
+            'category' => new CategoryResource($category),
+            'message' => "Category updated successfully"
+        ], 200);
     }
 
     /**
@@ -75,6 +83,6 @@ class CategoryController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Category deleted successfully'
-        ], 200);
+        ], 204);
     }
 }

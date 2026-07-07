@@ -12,10 +12,16 @@ class NotificationController extends Controller
     {
         
 
-        $notifications =auth()->user()->notifications()->latest()->get();
+        $notifications =auth()->user()->notifications()->latest()->paginate(10);
 
         return response()->json([
-            'notifications' => NotificationResource::collection($notifications)
+            'notifications' => NotificationResource::collection($notifications),
+             'pagination' => [
+                'current_page' => $notifications->currentPage(),
+                'last_page' => $notifications->lastPage(),
+                'per_page' => $notifications->perPage(),
+                'total_items' => $notifications->total()
+            ]
         ]);
 
     }
@@ -42,7 +48,7 @@ class NotificationController extends Controller
 
         return response()->json([
             "message" => 'delete notification successfully'
-        ]);
+        ],204);
 
     }
 }
