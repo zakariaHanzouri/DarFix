@@ -1,26 +1,56 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import * as authService from "../services/authService";
 
 export const authContext = createContext();
 
 function AuthContext({ children }) {
   const [user, setUser] = useState(null);
-  const [token, _setToken] = useState(null);
+  const [token, _setToken] = useState(() => {
+    return localStorage.getItem("token");
+  });
   const [loading, setLoading] = useState(false);
+  const [initializing, setInitializing] = useState(true);
 
   const login = async (data) => {
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await authService.login(data);
       setUser(response.data.user);
       setToken(response.data.token);
       return response;
     } catch (error) {
       throw error;
-    }finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
-    
+  };
+
+  useEffect(() => {
+    if (!token) {
+      setInitializing(false);
+      return;
+    }
+    const fetchCurrentUser = async () => {
+      try {
+        const response = await authService.getCurrentUser();
+
+        setUser(response.data.user);
+      } catch (error) {
+        if (error.response?.status === 401) {
+          clearAuth();
+        } else {
+          console.error(error);
+        }
+      } finally {
+        setInitializing(false);
+      }
+    };
+    fetchCurrentUser();
+  }, [token]);
+
+  const clearAuth = () => {
+    setUser(null);
+    setToken(null);
   };
 
   const setToken = (token) => {
@@ -33,9 +63,7 @@ function AuthContext({ children }) {
   };
 
   return (
-    <authContext.Provider
-      value={{ user,  token, loading,login }}
-    >
+    <authContext.Provider value={{ user, token, loading, login, initializing }}>
       {children}
     </authContext.Provider>
   );
