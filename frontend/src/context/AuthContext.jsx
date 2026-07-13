@@ -25,6 +25,39 @@ function AuthContext({ children }) {
     }
   };
 
+
+  const register= async (data)=>{
+
+    try {
+      setLoading(true);
+      const response= await authService.register(data);
+      setUser(response.data.user)
+      setToken(response.data.token)
+      return response
+
+    } catch (error) {
+      throw error;
+    }finally{
+      setLoading(false);
+    }
+
+
+  }
+
+  const logout=async()=>{
+    try {
+      setLoading(true)
+      await authService.logout();
+      clearAuth()
+    } catch (error) {
+      throw error
+    }finally{
+      setLoading(false)
+    }
+  }
+
+
+
   useEffect(() => {
     if (!token) {
       setInitializing(false);
@@ -63,7 +96,7 @@ function AuthContext({ children }) {
   };
 
   return (
-    <authContext.Provider value={{ user, token, loading, login, initializing }}>
+    <authContext.Provider value={{ user, token, loading, login, initializing,register,logout }}>
       {children}
     </authContext.Provider>
   );

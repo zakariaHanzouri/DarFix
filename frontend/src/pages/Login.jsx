@@ -6,11 +6,16 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 const schema = z.object({
   email: z.string().email(),
-  password: z.string()
+  password: z
+    .string()
     .min(8)
     .regex(/[A-Z]/, "Should have at least one uppercase letter ")
     .regex(/[a-z]/, "Should have at least one uppercase letter ")
-    .regex(/[0-9]/, "Should have some numbers  "),
+    .regex(/[0-9]/, "Should have some numbers  ")
+    .regex(
+      /[!@#$%^&*(),.?":{}|<>]/,
+      "The password field must contain at least one symbol",
+    ),
 });
 
 export default function Login() {
@@ -24,22 +29,15 @@ export default function Login() {
 
   const { login, loading } = UseAuth();
 
+  const navigate = useNavigate();
 
-  const navigate=useNavigate()
-
-  const onSubmit =async (data) => {
-    
+  const onSubmit = async (data) => {
     try {
-      const response= await login(data);
-      navigate('/')
-      
-      
+      const response = await login(data);
+      navigate("/");
     } catch (error) {
-     
-      toast.error(error.response?.data?.message || "something went wrong" )
-      
+      toast.error(error.response?.data?.message || "something went wrong");
     }
-
   };
 
   return (
@@ -54,8 +52,8 @@ export default function Login() {
             <h1 className="text-5xl font-black tracking-wide">DarFix</h1>
 
             <p className="mt-6 text-lg text-indigo-100 leading-8">
-              Connect with trusted professionals, and
-              build something amazing together.
+              Connect with trusted professionals, and build something amazing
+              together.
             </p>
 
             <div className="mt-12 space-y-5">
@@ -98,7 +96,12 @@ export default function Login() {
                   placeholder="example@email.com"
                   className="w-full h-14 rounded-xl bg-slate-800 border border-slate-700 px-5 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                 />
-                {errors.email&& <p className="text-red-600 font-semibold" > {errors.email.message} </p>}
+                {errors.email && (
+                  <p className="text-red-600 font-semibold">
+                    {" "}
+                    {errors.email.message}{" "}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -112,7 +115,12 @@ export default function Login() {
                   placeholder="••••••••••••"
                   className="w-full h-14 rounded-xl bg-slate-800 border border-slate-700 px-5 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                 />
-                {errors.password&& <p className="text-red-600 font-semibold" > {errors.password.message} </p>}
+                {errors.password && (
+                  <p className="text-red-600 font-semibold">
+                    {" "}
+                    {errors.password.message}{" "}
+                  </p>
+                )}
               </div>
 
               <button
@@ -120,7 +128,7 @@ export default function Login() {
                 disabled={loading}
                 className="w-full h-14 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-semibold transition duration-300 shadow-lg shadow-indigo-600/30"
               >
-                {loading? "Sign In..." :"Sign In"}
+                {loading ? "Sign In..." : "Sign In"}
               </button>
             </form>
           </div>
