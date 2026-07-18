@@ -4,15 +4,21 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import ProtectedRoute from "../components/ProtectedRoute";
 import GuestRoute from "../components/GuestRoute";
+import Layout from "../components/Layout";
+import NotFound from "../pages/NotFound";
+
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <ProtectedRoute>
-        <Home />
-      </ProtectedRoute>
-    ),
+    element:<ProtectedRoute><Layout/></ProtectedRoute>,
+    children:[
+     {
+       path:"/",
+       element:<Home/>
+     }
+    ]
+    
   },
   {
     path: "/login",
@@ -28,6 +34,12 @@ const router = createBrowserRouter([
       <GuestRoute>
         <Register />
       </GuestRoute>
+    ),
+  },
+  {
+    path:"*",
+    element: (
+     <NotFound/>
     ),
   },
 ]);
