@@ -36,7 +36,10 @@ export default function Login() {
       const response = await login(data);
       navigate("/");
     } catch (error) {
-      toast.error(error.response?.data?.message || "something went wrong");
+     
+        
+        toast.error(error.response?.data?.message || "something went wrong");
+      
     }
   };
 
