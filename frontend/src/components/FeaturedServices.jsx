@@ -12,6 +12,7 @@ import EmptyState from "./EmptyState";
 import { SearchX, XCircle } from "lucide-react";
 import ServiceCard from "./ServiceCard";
 import ErrorState from "./ErrorState";
+import SectionHeader from "./SectionHeader";
 
 function FeaturedServices() {
   const [services, setServices] = useState([]);
@@ -30,8 +31,6 @@ function FeaturedServices() {
         error.response?.data?.message ||
           "Something went wrong please try later",
       );
-
-      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -41,18 +40,25 @@ function FeaturedServices() {
     fetchServices();
   }, []);
 
-  const featuredServices = services.slice(0, 6);
+  const featuredServices = services.slice(0, 8);
 
   return (
-    <div className="  bg-slate-950 py-10  px-12 ">
+    <div className="  bg-slate-950 py-12  px-12 ">
       {loading && (
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  ">
-          {Array.from({ length: 6 }).map((_, index) => (
-            <SkeletonCard key={index} />
-          ))}
+        <div>
+          <SectionHeader
+            badge="Popular"
+            title="Most Requested Services"
+            subtitle="These services are the most requested by our customers."
+          />
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 py-12  px-12 ">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <SkeletonCard key={index} />
+            ))}
+          </div>
         </div>
       )}
-      
+
       {services.length === 0 && loading === false && error === null && (
         <EmptyState
           icon={<SearchX />}
@@ -64,10 +70,17 @@ function FeaturedServices() {
       )}
 
       {featuredServices.length > 0 && (
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
-          {featuredServices.map((service) => {
-            return <ServiceCard service={service} key={service.id} />;
-          })}
+        <div>
+          <SectionHeader
+            badge="Popular"
+            title="Most Requested Services"
+            subtitle="These services are the most requested by our customers."
+          />
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  py-12  px-12 ">
+            {featuredServices.map((service) => {
+              return <ServiceCard service={service} key={service.id} />;
+            })}
+          </div>
         </div>
       )}
       {error && (

@@ -44,31 +44,12 @@ export default function Hero() {
               <ArrowRight size={18} />
             </Link>
 
-            <Link
-              to="/register"
-              className="rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-slate-300 hover:text-white hover:border-indigo-500 transition"
-            >
-              Become a Professional
-            </Link>
+          
 
           </div>
 
-          {/* Mini Social Proof */}
-          <div className="mt-12 flex flex-wrap justify-center gap-8 text-slate-500">
-
-            <div>
-              <span className="text-white font-bold">500+</span> Professionals
-            </div>
-
-            <div>
-              <span className="text-white font-bold">1K+</span> Clients
-            </div>
-
-            <div>
-              <span className="text-white font-bold">5K+</span> Services
-            </div>
-
-          </div>
+         
+        
 
         </div>
 

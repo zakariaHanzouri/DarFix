@@ -10,7 +10,7 @@ export default function ServiceCard({ service }) {
       <div className="overflow-hidden h-52">
 
         <img
-          src={service.image}
+          src="/placeholder-service.png"
           alt={service.title}
           className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
         />
